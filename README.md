@@ -1,10 +1,13 @@
 # Install Project
 * include .env file at root level with the following params:
+
 `DATABASE_URL=
 DATABASE_URL_TEST=
 VENDOR_URL=`
 
-* to run npm start
+* to run 
+
+`npm start`
 
 # Run Project
 
@@ -40,13 +43,13 @@ curl --location 'http://localhost:3000/api/bookings' \
 # Run Test
 
 * to run test
-npm run test
+`npm run test`
 
 
 # Run Postgres container with etera_db database pre-created
-docker run --name etera-postgres -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=etera_db -p 5432:5432 -d postgres:15
+`docker run --name etera-postgres -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=etera_db -p 5432:5432 -d postgres:15`
 
-docker exec -it etera-postgres createdb -U user etera_db_test
+`docker exec -it etera-postgres createdb -U user etera_db_test`
 
 # Improvements:
 Logging be added
