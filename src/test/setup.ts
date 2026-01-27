@@ -2,7 +2,7 @@ import { connectToPostgres } from '../db/postgres';
 import { getPool } from '../db/postgres';
 
 beforeAll(async () => {
-  const testDbUrl = process.env.DATABASE_URL || 'postgresql://user:password@localhost:5432/etera_db';
+  const testDbUrl = process.env.DATABASE_URL_TEST || 'postgresql://user:password@localhost:5432/etera_db_test';
   await connectToPostgres(testDbUrl);
 
   const pool = getPool();
