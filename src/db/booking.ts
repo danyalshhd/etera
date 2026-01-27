@@ -35,6 +35,11 @@ export const ensureSchema = async () => {
       updated_at timestamptz not null default now()
     );
   `);
+
+  await pool.query(`
+    create index if not exists idx_bookings_idempotency_key 
+    on bookings(idempotency_key);
+  `);
 };
 
 export const createBooking = async (row: Omit<BookingRow, 'created_at' | 'updated_at'>): Promise<BookingRow> => {

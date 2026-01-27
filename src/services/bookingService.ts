@@ -11,6 +11,7 @@ import {
 import { Booking, CreateBookingInput, VendorResponse } from '../interfaces/Booking';
 import { mockVendorApi } from '../external/mockVendor';
 import { executeRetryLogic } from '../helpers/retryHelper';
+import { BookingStatusEnum } from '../types/BookingStatus';
 
 const talkToVendor = async (bookingId: string, attempt: number): Promise<VendorResponse> => {
   try {
@@ -43,7 +44,7 @@ export const createBookingWithRetry = async (input: CreateBookingInput): Promise
       user_id: userId,
       vendor_reference: null,
       amount,
-      status: 'pending',
+      status: BookingStatusEnum.PENDING,
       idempotency_key: idempotencyKey,
       retries: 0,
     });
@@ -61,21 +62,21 @@ export const createBookingWithRetry = async (input: CreateBookingInput): Promise
     maxAttempts: BOOKING_RETRY_LIMIT,
     onAttempt: (attempt) => talkToVendor(bookingId, attempt),
     onRetry: async (error, attempt) => {
-      await updateBookingStatus(bookingId, 'pending', null, attempt);
+      await updateBookingStatus(bookingId, BookingStatusEnum.PENDING, null, attempt);
     },
   });
 
   if (retryResult.confirmed) {
     const updated = await updateBookingStatus(
       bookingId,
-      'confirmed',
+      BookingStatusEnum.CONFIRMED,
       retryResult.vendor_reference,
       BOOKING_RETRY_LIMIT - 1
     );
     return { booking: (updated as Booking) || pending, isNew: true };
   }
 
-  const failed = await updateBookingStatus(bookingId, 'failed', null, BOOKING_RETRY_LIMIT);
+  const failed = await updateBookingStatus(bookingId, BookingStatusEnum.FAILED, null, BOOKING_RETRY_LIMIT);
   return { 
     booking: (failed as Booking) || pending, 
     error: retryResult.lastError || 'vendor failed', 

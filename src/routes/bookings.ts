@@ -21,12 +21,14 @@ router.post(
     const { booking, error, isNew } = await createBookingWithRetry({ userId, amount, idempotencyKey });
 
     if (error) {
-      res.status(502).send({ ...booking, message: error });
+      const { idempotency_key, ...bookingWithoutKey } = booking;
+      res.status(502).send({ ...bookingWithoutKey, message: error });
       return;
     }
 
+    const { idempotency_key, ...bookingWithoutKey } = booking;
     const statusCode = isNew ? 201 : 200;
-    res.status(statusCode).send(booking);
+    res.status(statusCode).send(bookingWithoutKey);
   }
 );
 
@@ -44,7 +46,8 @@ router.get(
       return;
     }
 
-    res.status(200).send(booking);
+    const { idempotency_key, ...bookingWithoutKey } = booking;
+    res.status(200).send(bookingWithoutKey);
   }
 );
 

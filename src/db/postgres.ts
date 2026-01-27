@@ -12,6 +12,14 @@ export const connectToPostgres = async (connectionString: string) => {
   }
 };
 
+export const disconnectPostgres = async () => {
+  if (pool) {
+    await pool.end();
+    pool = null;
+    console.log('Disconnected from Postgres');
+  }
+};
+
 export const getPool = (): Pool | null => {
   return pool;
 };
