@@ -28,3 +28,7 @@ npm run test
 docker run --name etera-postgres -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=etera_db -p 5432:5432 -d postgres:15
 
 docker exec -it etera-postgres createdb -U user etera_db_test
+
+Improvements:
+Logging be added
+ORM be utilized
