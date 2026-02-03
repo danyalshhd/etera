@@ -7,6 +7,7 @@ VENDOR_URL=`
 
 * to run 
 
+`npm i`
 `npm start`
 
 # Run Project
